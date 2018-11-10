@@ -60,12 +60,34 @@ class Artikel extends CI_Controller {
 		}else{
 			//kondisi jika validasi lolos
 
+			//set config
+			$gambar_artikel = "";
+			if($_FILES['gambar_artikel']['tmp_name'] != ''){
+				$config['upload_path']          = './uploads/';
+				$config['allowed_types']        = 'gif|jpg|png';
+				$config['encrypt_name']        	= TRUE;
+		 		
+		 		//load library
+				$this->load->library('upload', $config);
+		 		
+				if ($this->upload->do_upload('gambar_artikel')){
+					//save to db
+					$gambar_artikel = $this->upload->data('file_name');
+				}else{
+					print_r($this->upload->display_errors());exit();
+				}
+			}
+
 			//get input form, key array tidak boleh asal, tp ikut ke field di table databasenya
 			$id_artikel = $this->input->post('id_artikel');
 			$data['judul_artikel'] = $this->input->post('judul_artikel');
 			$data['isi_artikel'] = $this->input->post('isi_artikel');
 			$data['author_artikel'] = $this->input->post('author_artikel');
 			$data['id_kategori'] = $this->input->post('id_kategori');
+			//set nama gambar artikel
+			if(!empty($gambar_artikel)){
+				$data['gambar_artikel'] = $gambar_artikel;
+			}
 
 			if(empty($id_artikel)){
 				//panggil insert function dari model

@@ -8,7 +8,7 @@
 		<?php $this->load->view('partials/menu'); ?>
 
 		<h1>Form Artikel Saya</h1>
-		<form action="<?php echo site_url('artikel/process'); ?>" method="POST">
+		<form action="<?php echo site_url('artikel/process'); ?>" method="POST" enctype="multipart/form-data">
 			<?php // echo validation_errors(); ?>
 
 			<div class="form-group">
@@ -33,6 +33,17 @@
 			</div>
 
 			<div class="form-group">
+				<label for="gambar_artikel">Gambar Artikel</label>
+				<input class="form-control" type="file" name="gambar_artikel" placeholder="gambar_artikel">
+
+				<?php if(isset($artikel_data)): ?>
+
+					<img src="<?php echo base_url('uploads/'.$artikel_data['gambar_artikel']); ?>" width="100%">
+
+				<?php endif; ?>
+			</div>
+
+			<div class="form-group">
 				<label for="author_artikel">ID Kategori</label>
 				<select class="form-control" name="id_kategori">
 					<option value="">-- Pilih Kategori --</option>
@@ -43,7 +54,7 @@
 							if(set_value('id_kategori')){
 								$id_kategori = set_value('id_kategori');
 							}else{
-								$id_kategori = $artikel_data['id_kategori'];
+								$id_kategori = isset($artikel_data['id_kategori']) ? $artikel_data['id_kategori'] : '';
 							}
 
 							//kondisi selected
